@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { Automata } from './automata';
+import { Automata } from './services/automata/automata';
 
 @Component({
   selector: 'app-root',

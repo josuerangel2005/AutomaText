@@ -15,7 +15,11 @@
     <button type="button">TT</button>
   </div>
 
-  <textarea class="editor-textarea" placeholder="Escribe o pega aquí tu texto...">
+  <textarea
+    [(ngModel)]="texto"
+    class="editor-textarea"
+    placeholder="Escribe o pega aquí tu texto..."
+  >
 La teoría de la computación estudia modelos matemáticos del cálculo y la computación.
 
 Los autómatas finitos son una herramienta fundamental para reconocer patrones de texto.

@@ -1,25 +1,16 @@
 import { Injectable } from '@angular/core';
 import { RangoIndices } from './automata.model';
+import { Utils } from '../utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Automata {
-  constructor() {
+  constructor(private utils: Utils) {
     if (!(window as any).isProduction) {
       // Opcional: solo en desarrollo
       (window as any).automata = this;
     }
-  }
-
-  subString(palabra: string, indiceInferior: number, indiceSuperior: number): string {
-    let palabraSubString: string = '';
-
-    for (let i: number = indiceInferior; i < indiceSuperior; i++) {
-      palabraSubString += palabra[i];
-    }
-
-    return palabraSubString;
   }
 
   getPrefijos(patron: string): string[] {
@@ -27,7 +18,7 @@ export class Automata {
     let i: number = 0;
 
     while (i < patron.length - 1) {
-      prefijos.push(this.subString(patron, 0, i + 1));
+      prefijos.push(this.utils.subString(patron, 0, i + 1));
       i++;
     }
 
@@ -39,7 +30,7 @@ export class Automata {
     let i: number = patron.length - 1;
 
     while (i > 0) {
-      sufijos.push(this.subString(patron, i, patron.length));
+      sufijos.push(this.utils.subString(patron, i, patron.length));
       i--;
     }
     return sufijos;
@@ -76,9 +67,9 @@ export class Automata {
       tabla.push(
         this.getMayorLongitud(
           this.getIguales(
-            this.getPrefijos(this.subString(patron, 0, i + 1)),
+            this.getPrefijos(this.utils.subString(patron, 0, i + 1)),
 
-            this.getSufijos(this.subString(patron, 0, i + 1)),
+            this.getSufijos(this.utils.subString(patron, 0, i + 1)),
           ),
         ),
       );

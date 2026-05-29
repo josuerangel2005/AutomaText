@@ -5,9 +5,9 @@
   </div>
 
   <div class="search-row">
-    <input type="text" class="search-input" placeholder="autómatas" />
+    <input [(ngModel)]="patron" type="text" class="search-input" placeholder="autómatas" />
 
-    <button type="button" class="search-button">
+    <button (click)="buscar()" type="button" class="search-button">
       <span>🔍</span>
       <span>Buscar</span>
     </button>
