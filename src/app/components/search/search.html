@@ -1,21 +1,49 @@
-<section class="panel">
+<section class="panel search-panel">
   <div class="panel-title">
-    <span class="panel-icon">🔍</span>
+    <span class="panel-icon">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#5b4dbd"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </span>
     <h2>Búsqueda</h2>
   </div>
 
   <div class="search-row">
-    <input [(ngModel)]="patron" type="text" class="search-input" placeholder="autómatas" />
+    <div class="input-container">
+      <input [(ngModel)]="patron" type="text" class="search-input" placeholder="autómatas" />
+    </div>
 
     <button (click)="buscar()" type="button" class="search-button">
-      <span>🔍</span>
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
       <span>Buscar</span>
     </button>
   </div>
 
   <label class="checkbox-row">
-    <input type="checkbox" />
-    <span>sensibilidad mayúscula</span>
+    <input type="checkbox" class="custom-checkbox" />
+    <span class="checkbox-text">sensibilidad mayúscula</span>
   </label>
 
   <div class="results-header">
@@ -25,18 +53,21 @@
 
   <div class="results-list">
     <app-results
+      class="result-item"
       title="Coincidencia 1"
       meta="Línea 4, posición 9"
       snippet="Los autómatas finitos son un ..."
     ></app-results>
 
     <app-results
+      class="result-item"
       title="Coincidencia 2"
       meta="Línea 6, posición 52"
       snippet="basado en autómatas finitos determ ..."
     ></app-results>
 
     <app-results
+      class="result-item"
       title="Coincidencia 3"
       meta="Línea 8, posición 9"
       snippet="Los autómatas permiten proce ..."
