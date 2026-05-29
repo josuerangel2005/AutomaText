@@ -2,6 +2,10 @@
   display: block;
 }
 
+.resultado-texto {
+  font-family: 'Intel One Mono', monospace;
+}
+
 .result-item {
   border-left: 2px solid #5b4dbd;
   padding: 8px 12px 8px 14px;

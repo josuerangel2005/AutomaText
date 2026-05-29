@@ -17,6 +17,7 @@ export class Search {
   }
 
   buscar() {
+    this.alCambiarPatron();
     this.busqueda.buscar();
   }
 }

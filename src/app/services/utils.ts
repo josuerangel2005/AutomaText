@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RangoIndices } from './automata.model';
+import { RangoIndices } from './automata/automata.model';
 
 @Injectable({
   providedIn: 'root',

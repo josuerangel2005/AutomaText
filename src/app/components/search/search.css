@@ -3,6 +3,10 @@
   min-width: 0;
 }
 
+.editor-textarea {
+  font-family: 'Inter', sans-serif;
+}
+
 .panel {
   background: #fbfbfb;
   border: 1px solid #cfcfd7;

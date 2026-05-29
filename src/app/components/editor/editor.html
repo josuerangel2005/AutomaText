@@ -13,23 +13,16 @@
     <button type="button">⋮</button>
     <button type="button">▧</button>
     <button type="button">TT</button>
+    <button type="button" (click)="mostrarResaltado = !mostrarResaltado">👁</button>
   </div>
 
   <textarea
-    [(ngModel)]="texto"
+    *ngIf="!mostrarResaltado"
+    [(ngModel)]="textoOriginal"
+    (ngModelChange)="alCambiarTexto()"
     class="editor-textarea"
     placeholder="Escribe o pega aquí tu texto..."
-  >
-La teoría de la computación estudia modelos matemáticos del cálculo y la computación.
+  ></textarea>
 
-Los autómatas finitos son una herramienta fundamental para reconocer patrones de texto.
-
-Este proyecto implementa un buscador basado en autómatas finitos deterministas para identificar coincidencias de patrones.
-
-Los autómatas permiten procesar cadenas de entrada y determinar si pertenecen a un lenguaje.
-
-El objetivo es aplicar los conceptos de la teoría de la computación en una herramienta práctica y útil.</textarea
-  >
-
-  <div class="empty-footer"></div>
+  <div *ngIf="mostrarResaltado" class="texto-resaltado" [innerHTML]="textoResaltado"></div>
 </section>

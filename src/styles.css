@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+.texto-resaltado {
+  white-space: pre-wrap;
+  font-family: 'Inter', sans-serif;
+  color: #000;
+  line-height: 1.6;
+}
+
+.remarcado {
+  background-color: #fffde2;
+  color: #000;
+  font-weight: 500;
+  border-radius: 2px;
+  padding: 0 2px;
+}
