@@ -6,4 +6,8 @@ import { Component } from '@angular/core';
   templateUrl: './results.html',
   styleUrl: './results.css',
 })
-export class Results {}
+export class Results {
+  title: string = 'Hola';
+  meta: string = 'Hola';
+  snippet: string = 'Hola';
+}

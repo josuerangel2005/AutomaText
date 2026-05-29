@@ -1,0 +1,85 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.panel {
+  background: #fbfbfb;
+  border: 1px solid #cfcfd7;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px 10px;
+}
+
+.panel-icon {
+  font-size: 30px;
+  color: #5b4dbd;
+}
+
+.panel-title h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f4f4f7;
+  border-top: 1px solid #ececf1;
+  border-bottom: 1px solid #ececf1;
+  flex-wrap: wrap;
+}
+
+.toolbar button {
+  border: none;
+  background: transparent;
+  color: #222;
+  font-size: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.toolbar button:hover {
+  background: rgba(91, 77, 189, 0.12);
+}
+
+.editor-textarea {
+  flex: 1;
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 16px 18px;
+  background: transparent;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #1f1f1f;
+  min-height: 360px;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.empty-footer {
+  height: 102px;
+  border-top: 1px solid #dcdce3;
+  background: #fbfbfb;
+}
+
+@media (max-width: 980px) {
+  .panel-title h2 {
+    font-size: 22px;
+  }
+}

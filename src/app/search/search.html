@@ -1,1 +1,45 @@
-<p>search works!</p>
+<section class="panel">
+  <div class="panel-title">
+    <span class="panel-icon">🔍</span>
+    <h2>Búsqueda</h2>
+  </div>
+
+  <div class="search-row">
+    <input type="text" class="search-input" placeholder="autómatas" />
+
+    <button type="button" class="search-button">
+      <span>🔍</span>
+      <span>Buscar</span>
+    </button>
+  </div>
+
+  <label class="checkbox-row">
+    <input type="checkbox" />
+    <span>sensibilidad mayúscula</span>
+  </label>
+
+  <div class="results-header">
+    <h3>Resultados</h3>
+    <span class="results-count">3 coincidencias</span>
+  </div>
+
+  <div class="results-list">
+    <app-results
+      title="Coincidencia 1"
+      meta="Línea 4, posición 9"
+      snippet="Los autómatas finitos son un ..."
+    ></app-results>
+
+    <app-results
+      title="Coincidencia 2"
+      meta="Línea 6, posición 52"
+      snippet="basado en autómatas finitos determ ..."
+    ></app-results>
+
+    <app-results
+      title="Coincidencia 3"
+      meta="Línea 8, posición 9"
+      snippet="Los autómatas permiten proce ..."
+    ></app-results>
+  </div>
+</section>

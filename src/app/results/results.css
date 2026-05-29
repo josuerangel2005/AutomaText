@@ -1,0 +1,38 @@
+:host {
+  display: block;
+}
+
+.result-item {
+  border-left: 2px solid #5b4dbd;
+  padding: 8px 12px 8px 14px;
+  background: #ffffff;
+}
+
+.result-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-icon {
+  color: #5b4dbd;
+}
+
+.result-title h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.result-meta {
+  margin: 2px 0 6px;
+  font-size: 12px;
+  color: #666;
+}
+
+.result-snippet {
+  margin: 0;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  color: #222;
+}
