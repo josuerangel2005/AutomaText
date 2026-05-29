@@ -20,7 +20,13 @@
 
   <div class="search-row">
     <div class="input-container">
-      <input [(ngModel)]="patron" type="text" class="search-input" placeholder="autómatas" />
+      <input
+        [(ngModel)]="patron"
+        (keydown.enter)="buscar(); $event.preventDefault()"
+        type="text"
+        class="search-input"
+        placeholder="Juan comia yogurt"
+      />
     </div>
 
     <button (click)="buscar()" type="button" class="search-button">
@@ -48,29 +54,17 @@
 
   <div class="results-header">
     <h3>Resultados</h3>
-    <span class="results-count">3 coincidencias</span>
+    <span class="results-count">{{ totalCoincidencias }}</span>
   </div>
 
   <div class="results-list">
-    <app-results
-      class="result-item"
-      title="Coincidencia 1"
-      meta="Línea 4, posición 9"
-      snippet="Los autómatas finitos son un ..."
-    ></app-results>
-
-    <app-results
-      class="result-item"
-      title="Coincidencia 2"
-      meta="Línea 6, posición 52"
-      snippet="basado en autómatas finitos determ ..."
-    ></app-results>
-
-    <app-results
-      class="result-item"
-      title="Coincidencia 3"
-      meta="Línea 8, posición 9"
-      snippet="Los autómatas permiten proce ..."
-    ></app-results>
+    @for (coincidencia of resultados; track coincidencia.titulo) {
+      <app-results
+        class="result-item"
+        [title]="coincidencia.titulo"
+        [meta]="'Línea ' + coincidencia.linea + ', posición ' + coincidencia.posicion"
+        [snippet]="coincidencia.snippet"
+      ></app-results>
+    }
   </div>
 </section>

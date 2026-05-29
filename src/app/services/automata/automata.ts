@@ -6,12 +6,7 @@ import { Utils } from '../utils';
   providedIn: 'root',
 })
 export class Automata {
-  constructor(private utils: Utils) {
-    if (!(window as any).isProduction) {
-      // Opcional: solo en desarrollo
-      (window as any).automata = this;
-    }
-  }
+  constructor(private utils: Utils) {}
 
   getPrefijos(patron: string): string[] {
     let prefijos: string[] = [];

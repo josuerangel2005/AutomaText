@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { Automata } from './services/automata/automata';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +8,4 @@ import { Automata } from './services/automata/automata';
 })
 export class App {
   protected readonly title = signal('automa-text');
-
-  constructor(private automata: Automata) {}
 }

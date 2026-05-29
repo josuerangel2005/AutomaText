@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RangoIndices } from '../../services/automata/automata.model';
 import { Busqueda } from '../../services/busqueda';
-import { Utils } from '../../services/utils';
 
 @Component({
   selector: 'app-results',
@@ -10,9 +9,9 @@ import { Utils } from '../../services/utils';
   styleUrl: './results.css',
 })
 export class Results {
-  title: string = 'Hola';
-  meta: string = 'Hola';
-  snippet: string = 'Hola';
+  @Input() title: string = '';
+  @Input() meta: string = '';
+  @Input() snippet: string = '';
 
   resultados: RangoIndices[] = [];
 
@@ -22,8 +21,5 @@ export class Results {
     });
   }
 
-  constructor(
-    private busqueda: Busqueda,
-    private utils: Utils,
-  ) {}
+  constructor(private busqueda: Busqueda) {}
 }
