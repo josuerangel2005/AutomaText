@@ -157,7 +157,11 @@
   border-top: 1px solid #e5e5ea;
   background: #fbfbfd;
 }
-
+.editor-contenteditable:empty::before {
+  content: attr(data-placeholder);
+  color: #999;
+  pointer-events: none;
+}
 /* --- RESPONSIVE DESIGN --- */
 @media (max-width: 768px) {
   .panel {

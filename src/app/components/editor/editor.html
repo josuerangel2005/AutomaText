@@ -27,13 +27,39 @@
 
   <div class="toolbar-container">
     <div class="toolbar">
-      <button type="button" class="btn-bold">B</button>
-      <button type="button" class="btn-italic">I</button>
-      <button type="button" class="btn-underline">U</button>
+      <button
+        (mousedown)="$event.preventDefault()"
+        (click)="aplicarFormato('bold')"
+        type="button"
+        class="btn-bold"
+      >
+        B
+      </button>
+      <button
+        (mousedown)="$event.preventDefault()"
+        (click)="aplicarFormato('italic')"
+        type="button"
+        class="btn-italic"
+      >
+        I
+      </button>
+      <button
+        (mousedown)="$event.preventDefault()"
+        (click)="aplicarFormato('underline')"
+        type="button"
+        class="btn-underline"
+      >
+        U
+      </button>
 
       <span class="divider"></span>
 
-      <button type="button" class="btn-align">
+      <button
+        (mousedown)="$event.preventDefault()"
+        (click)="aplicarAlineacion('justifyLeft')"
+        type="button"
+        class="btn-align"
+      >
         <svg
           width="18"
           height="18"
@@ -48,7 +74,12 @@
           <line x1="18" y1="18" x2="6" y2="18"></line>
         </svg>
       </button>
-      <button type="button" class="btn-align">
+      <button
+        (mousedown)="$event.preventDefault()"
+        (click)="aplicarAlineacion('justifyCenter')"
+        type="button"
+        class="btn-align"
+      >
         <svg
           width="18"
           height="18"
@@ -63,7 +94,12 @@
           <line x1="18" y1="18" x2="6" y2="18"></line>
         </svg>
       </button>
-      <button type="button" class="btn-align">
+      <button
+        (mousedown)="$event.preventDefault()"
+        (click)="aplicarAlineacion('justifyRight')"
+        type="button"
+        class="btn-align"
+      >
         <svg
           width="18"
           height="18"
@@ -81,7 +117,11 @@
 
       <span class="divider"></span>
 
-      <button type="button">
+      <button
+        (mousedown)="$event.preventDefault()"
+        (click)="aplicarLista('insertUnorderedList')"
+        type="button"
+      >
         <svg
           width="18"
           height="18"
@@ -98,7 +138,11 @@
           <line x1="5" y1="18" x2="5.01" y2="18"></line>
         </svg>
       </button>
-      <button type="button">
+      <button
+        (mousedown)="$event.preventDefault()"
+        (click)="aplicarLista('insertOrderedList')"
+        type="button"
+      >
         <svg
           width="18"
           height="18"
@@ -118,7 +162,7 @@
 
       <span class="divider"></span>
 
-      <button type="button">
+      <button (mousedown)="$event.preventDefault()" (click)="resaltarSeleccion()" type="button">
         <svg
           width="18"
           height="18"
@@ -135,20 +179,6 @@
           <path d="M14 7 3.45 17.55O"></path>
           <path d="m18 11-3-3"></path>
           <path d="M2 22h20"></path>
-        </svg>
-      </button>
-      <button type="button" class="btn-text-size">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-        >
-          <polyline points="4 7 4 4 20 4 20 7"></polyline>
-          <line x1="9" y1="20" x2="15" y2="20"></line>
-          <line x1="12" y1="4" x2="12" y2="20"></line>
         </svg>
       </button>
 
@@ -177,16 +207,15 @@
   </div>
 
   <div class="editor-content-area">
-    <textarea
-      *ngIf="!modoVisual"
-      [(ngModel)]="textoOriginal"
-      (ngModelChange)="alCambiarTexto()"
-      class="editor-textarea"
-      placeholder="Escribe o pega aquí tu texto..."
-    ></textarea>
-
-    <div *ngIf="modoVisual" class="texto-resaltado" [innerHTML]="textoResaltado"></div>
+    <div
+      #editor
+      class="editor-textarea editor-contenteditable"
+      contenteditable="true"
+      [hidden]="modoVisual"
+      (input)="alCambiarTexto()"
+      data-placeholder="Escriba su texto aquí..."
+    ></div>
+    <div [hidden]="!modoVisual" class="texto-resaltado" [innerHTML]="textoResaltado"></div>
   </div>
-
   <div class="empty-footer"></div>
 </section>

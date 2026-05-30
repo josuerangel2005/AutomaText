@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Busqueda } from '../../services/busqueda';
 import { RangoIndices } from '../../services/automata/automata.model';
 import { Resaltado } from '../../services/resaltado';
@@ -14,6 +14,9 @@ export class Editor implements OnInit {
   textoOriginal: string = '';
   textoResaltado: string = '';
   modoVisual: boolean = false;
+  textoEditable: string = '';
+  @ViewChild('editor') editorRef!: ElementRef<HTMLDivElement>;
+  ignorarMayusculas: boolean = false;
 
   constructor(
     private busqueda: Busqueda,
@@ -31,7 +34,7 @@ export class Editor implements OnInit {
   }
 
   alCambiarTexto(): void {
-    this.busqueda.setTexto(this.textoOriginal);
+    this.actualizarTextoDesdeEditor();
   }
 
   resaltarTexto(): void {
@@ -40,5 +43,39 @@ export class Editor implements OnInit {
 
   alternarModo(): void {
     this.modoVisual = !this.modoVisual;
+  }
+
+  actualizarTextoDesdeEditor(): void {
+    const editor = this.editorRef?.nativeElement;
+    if (!editor) return;
+
+    this.textoEditable = editor.innerHTML;
+    this.textoOriginal = editor.innerText;
+    this.busqueda.setTexto(this.textoOriginal);
+  }
+
+  aplicarFormato(formato: 'bold' | 'italic' | 'underline'): void {
+    if (this.modoVisual) return;
+
+    document.execCommand(formato, false);
+    this.actualizarTextoDesdeEditor();
+  }
+
+  aplicarAlineacion(formato: 'justifyLeft' | 'justifyCenter' | 'justifyRight'): void {
+    if (this.modoVisual) return;
+    document.execCommand(formato, false);
+    this.actualizarTextoDesdeEditor();
+  }
+
+  aplicarLista(tipo: 'insertUnorderedList' | 'insertOrderedList'): void {
+    if (this.modoVisual) return;
+    document.execCommand(tipo, false);
+    this.actualizarTextoDesdeEditor();
+  }
+
+  resaltarSeleccion(): void {
+    if (this.modoVisual) return;
+    document.execCommand('hiliteColor', false, '#fff59d');
+    this.actualizarTextoDesdeEditor();
   }
 }

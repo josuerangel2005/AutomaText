@@ -10,10 +10,12 @@ export class Busqueda {
   private textoSubject = new BehaviorSubject<string>('');
   private patronSubject = new BehaviorSubject<string>('');
   private resultadoSubject = new BehaviorSubject<RangoIndices[]>([]);
+  private ignorarMayusculasSubject = new BehaviorSubject<boolean>(false);
 
   texto$ = this.textoSubject.asObservable();
   patron$ = this.patronSubject.asObservable();
   resultado$ = this.resultadoSubject.asObservable();
+  ignorarMayusculas$ = this.ignorarMayusculasSubject.asObservable();
 
   constructor(private automata: Automata) {}
 
@@ -25,6 +27,10 @@ export class Busqueda {
     this.patronSubject.next(patron);
   }
 
+  setIgnorarMayusculas(ignorar: boolean): void {
+    this.ignorarMayusculasSubject.next(ignorar);
+  }
+
   getTexto(): string {
     return this.textoSubject.getValue();
   }
@@ -33,9 +39,20 @@ export class Busqueda {
     return this.patronSubject.getValue();
   }
 
+  getIgnorarMayusculas(): boolean {
+    return this.ignorarMayusculasSubject.getValue();
+  }
+
   buscar(): void {
     this.resultadoSubject.next(
-      this.automata.kmp(this.textoSubject.getValue(), this.patronSubject.getValue()),
+      this.automata.kmp(
+        this.ignorarMayusculasSubject.getValue()
+          ? this.textoSubject.getValue().toLocaleLowerCase()
+          : this.textoSubject.getValue(),
+        this.ignorarMayusculasSubject.getValue()
+          ? this.patronSubject.getValue().toLocaleLowerCase()
+          : this.patronSubject.getValue(),
+      ),
     );
   }
 }
