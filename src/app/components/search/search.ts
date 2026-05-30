@@ -16,6 +16,7 @@ export class Search implements OnInit {
   rangos: RangoIndices[] = [];
   totalCoincidencias: number = 0;
   ignorarMayusculas: boolean = false;
+  ignorarEspaciosEnBlanco: boolean = false;
 
   ngOnInit(): void {
     this.busqueda.resultado$.subscribe((val: RangoIndices[]) => {
@@ -37,6 +38,7 @@ export class Search implements OnInit {
   buscar() {
     this.alCambiarPatron();
     this.busqueda.setIgnorarMayusculas(this.ignorarMayusculas);
+    this.busqueda.setIgnorarEspaciosEnBlanco(this.ignorarEspaciosEnBlanco);
     this.busqueda.buscar();
   }
 }

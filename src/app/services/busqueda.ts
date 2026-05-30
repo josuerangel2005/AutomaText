@@ -11,11 +11,13 @@ export class Busqueda {
   private patronSubject = new BehaviorSubject<string>('');
   private resultadoSubject = new BehaviorSubject<RangoIndices[]>([]);
   private ignorarMayusculasSubject = new BehaviorSubject<boolean>(false);
+  private ignorarEspaciosEnBlancoSubject = new BehaviorSubject<boolean>(false);
 
   texto$ = this.textoSubject.asObservable();
   patron$ = this.patronSubject.asObservable();
   resultado$ = this.resultadoSubject.asObservable();
   ignorarMayusculas$ = this.ignorarMayusculasSubject.asObservable();
+  ignorarEspaciosEnBlanco$ = this.ignorarEspaciosEnBlancoSubject.asObservable();
 
   constructor(private automata: Automata) {}
 
@@ -31,6 +33,10 @@ export class Busqueda {
     this.ignorarMayusculasSubject.next(ignorar);
   }
 
+  setIgnorarEspaciosEnBlanco(ignorar: boolean): void {
+    this.ignorarEspaciosEnBlancoSubject.next(ignorar);
+  }
+
   getTexto(): string {
     return this.textoSubject.getValue();
   }
@@ -43,16 +49,24 @@ export class Busqueda {
     return this.ignorarMayusculasSubject.getValue();
   }
 
+  getIgnorarEspaciosEnBlanco(): boolean {
+    return this.ignorarEspaciosEnBlancoSubject.getValue();
+  }
+
   buscar(): void {
-    this.resultadoSubject.next(
-      this.automata.kmp(
-        this.ignorarMayusculasSubject.getValue()
-          ? this.textoSubject.getValue().toLocaleLowerCase()
-          : this.textoSubject.getValue(),
-        this.ignorarMayusculasSubject.getValue()
-          ? this.patronSubject.getValue().toLocaleLowerCase()
-          : this.patronSubject.getValue(),
-      ),
-    );
+    let texto: string = this.ignorarMayusculasSubject.getValue()
+      ? this.textoSubject.getValue().toLocaleLowerCase()
+      : this.textoSubject.getValue();
+
+    let patron: string = this.ignorarMayusculasSubject.getValue()
+      ? this.patronSubject.getValue().toLocaleLowerCase()
+      : this.patronSubject.getValue();
+
+    if (this.ignorarEspaciosEnBlancoSubject.getValue()) {
+      texto = texto.trim();
+      patron = patron.trim();
+    }
+
+    this.resultadoSubject.next(this.automata.kmp(texto, patron));
   }
 }
