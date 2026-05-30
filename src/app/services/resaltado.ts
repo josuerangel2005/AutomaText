@@ -24,7 +24,7 @@ export class Resaltado {
 
     for (let rango of indices) {
       const fragmento: string = this.utils.subString(texto, cursor, rango.inicio);
-      if (fragmento !== '') textoNormal.push(fragmento);
+      textoNormal.push(fragmento);
       cursor = rango.final + 1;
     }
 
