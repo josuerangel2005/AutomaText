@@ -44,16 +44,16 @@
       <span>Buscar</span>
     </button>
   </div>
-  <label class="checkbox-row">
-    <span class="checkbox-item">
+  <div class="checkbox-row">
+    <label class="checkbox-item">
       <input [(ngModel)]="ignorarMayusculas" type="checkbox" class="custom-checkbox" />
       <span class="checkbox-text">Ignorar mayúsculas/minúsculas</span>
-    </span>
-    <span class="checkbox-item">
+    </label>
+    <label class="checkbox-item">
       <input [(ngModel)]="ignorarEspaciosEnBlanco" type="checkbox" class="custom-checkbox" />
       <span class="checkbox-text">Ignorar espacios en blanco</span>
-    </span>
-  </label>
+    </label>
+  </div>
   <div class="results-header">
     <h3>Resultados</h3>
     <span class="results-count">{{ totalCoincidencias }}</span>
