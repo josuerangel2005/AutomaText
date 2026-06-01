@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Busqueda } from '../../services/busqueda';
 import { Utils } from '../../services/utils';
-import { RangoIndices } from '../../services/automata/automata.model';
-import { Resultados } from '../../services/resultados.model';
+import { RangoIndices } from '../../model/automata.model';
+import { Resultados } from '../../model/resultados.model';
 
 @Component({
   selector: 'app-search',

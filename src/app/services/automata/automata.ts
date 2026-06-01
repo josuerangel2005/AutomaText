@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { RangoIndices } from './automata.model';
+import { RangoIndices } from '../../model/automata.model';
 import { Utils } from '../utils';
+import { TablaTransciones } from '../../model/tabla.model';
 
 @Injectable({
   providedIn: 'root',
@@ -8,91 +9,57 @@ import { Utils } from '../utils';
 export class Automata {
   constructor(private utils: Utils) {}
 
-  getPrefijos(patron: string): string[] {
-    let prefijos: string[] = [];
-    let i: number = 0;
+  siguienteEstado(patron: string, estado: number, simbolo: string): number {
+    const m: number = patron.length;
+    const prefijo: string = this.utils.subString(patron, 0, estado) + simbolo;
 
-    while (i < patron.length - 1) {
-      prefijos.push(this.utils.subString(patron, 0, i + 1));
-      i++;
+    for (
+      let nuevoEstado: number = m < estado + 1 ? m : estado + 1;
+      nuevoEstado > 0;
+      nuevoEstado--
+    ) {
+      if (this.utils.finalizaEn(prefijo, this.utils.subString(patron, 0, nuevoEstado)))
+        return nuevoEstado;
     }
 
-    return prefijos;
+    return 0;
   }
 
-  getSufijos(patron: string): string[] {
-    let sufijos: string[] = [];
-    let i: number = patron.length - 1;
+  construirAutomata(patron: string): { delta: TablaTransciones; estadoFinal: number } {
+    const delta: TablaTransciones = {};
+    const m: number = patron.length;
 
-    while (i > 0) {
-      sufijos.push(this.utils.subString(patron, i, patron.length));
-      i--;
-    }
-    return sufijos;
-  }
+    const alfabeto: string[] = this.utils.eliminarRepetidos(this.utils.separar(patron, ''));
 
-  getIguales(prefijos: string[], sufijos: string[]): string[] {
-    let iguales: string[] = [];
+    for (let estado = 0; estado <= m; estado++) {
+      delta[estado] = {};
 
-    for (let i: number = 0; i < prefijos.length; i++) {
-      if (prefijos[i] === sufijos[i]) {
-        iguales.push(prefijos[i]);
+      for (const simbolo of alfabeto) {
+        delta[estado][simbolo] = this.siguienteEstado(patron, estado, simbolo);
       }
     }
 
-    return iguales;
+    return { delta, estadoFinal: m };
   }
 
-  getMayorLongitud(palabras: string[]): number {
-    if (!palabras || palabras.length === 0) return 0;
+  buscarConAutomata(texto: string, patron: string): RangoIndices[] {
+    if (!patron) return [];
 
-    let mayorTamanio: number = 0;
+    const rangos: RangoIndices[] = [];
+    let estado: number = 0;
+    const { delta, estadoFinal } = this.construirAutomata(patron);
 
-    for (let palabra of palabras) {
-      if (palabra.length > mayorTamanio) mayorTamanio = palabra.length;
-    }
+    for (let i: number = 0; i < texto.length; i++) {
+      const simbolo: string = texto[i];
 
-    return mayorTamanio;
-  }
-
-  tablaPi(patron: string): number[] {
-    let tabla: number[] = [];
-
-    for (let i: number = 0; i < patron.length; i++) {
-      tabla.push(
-        this.getMayorLongitud(
-          this.getIguales(
-            this.getPrefijos(this.utils.subString(patron, 0, i + 1)),
-
-            this.getSufijos(this.utils.subString(patron, 0, i + 1)),
-          ),
-        ),
-      );
-    }
-
-    return tabla;
-  }
-
-  kmp(texto: string, patron: string): RangoIndices[] {
-    let rangos: RangoIndices[] = [];
-    let i: number = 0;
-    let j: number = 0;
-    let tabla: number[] = this.tablaPi(patron);
-
-    while (i < texto.length) {
-      if (texto[i] === patron[j]) {
-        i++;
-        j++;
-        if (j == patron.length) {
-          rangos.push({ inicio: i - j, final: i - 1 });
-          j = tabla[j - 1];
-        }
+      if (delta[estado] && delta[estado][simbolo] !== undefined) {
+        estado = delta[estado][simbolo];
       } else {
-        if (j == 0) {
-          i++;
-        } else {
-          j = tabla[j - 1];
-        }
+        estado = 0;
+      }
+
+      if (estado === estadoFinal) {
+        rangos.push({ inicio: i - patron.length + 1, final: i });
       }
     }
 

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RangoIndices } from '../../services/automata/automata.model';
+import { RangoIndices } from '../../model/automata.model';
 import { Busqueda } from '../../services/busqueda';
 
 @Component({

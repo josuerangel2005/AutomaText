@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Busqueda } from '../../services/busqueda';
-import { RangoIndices } from '../../services/automata/automata.model';
+import { RangoIndices } from '../../model/automata.model';
 import { Resaltado } from '../../services/resaltado';
 
 @Component({

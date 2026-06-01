@@ -215,3 +215,70 @@
     gap: 12px;
   }
 }
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .panel {
+    border-radius: 12px;
+  }
+
+  .panel-title {
+    padding: 12px 12px 8px;
+    gap: 10px;
+  }
+
+  .panel-title h2 {
+    font-size: 17px;
+  }
+
+  .search-row {
+    padding: 0 12px;
+    gap: 6px;
+  }
+
+  .search-input {
+    height: 40px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+
+  .search-button {
+    height: 40px;
+    padding: 0 14px;
+    font-size: 13px;
+    border-radius: 12px;
+    gap: 6px;
+  }
+
+  .checkbox-row {
+    flex-wrap: wrap;
+    padding: 8px 12px 12px;
+    gap: 6px 10px;
+    row-gap: 8px;
+  }
+
+  .checkbox-text {
+    font-size: 12px;
+  }
+
+  .results-header {
+    padding: 0 12px 6px;
+  }
+
+  .results-header h3 {
+    font-size: 14px;
+  }
+
+  .results-count {
+    font-size: 14px;
+  }
+
+  .results-list {
+    padding: 6px 12px 12px;
+    gap: 10px;
+  }
+
+  .result-item {
+    padding-left: 10px;
+  }
+}

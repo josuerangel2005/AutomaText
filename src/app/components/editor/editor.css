@@ -4,7 +4,6 @@
   box-sizing: border-box;
 }
 
-/* Contenedor Principal estilo Card moderna */
 .panel {
   background: #ffffff;
   border: 1px solid #d3d3df;
@@ -162,6 +161,7 @@
   color: #999;
   pointer-events: none;
 }
+
 /* --- RESPONSIVE DESIGN --- */
 @media (max-width: 768px) {
   .panel {
@@ -181,7 +181,7 @@
   }
 
   .toolbar {
-    padding: 4px;
+    padding: 4px 6px;
     gap: 2px;
   }
 
@@ -204,6 +204,57 @@
   }
 
   .empty-footer {
-    height: 60px;
+    height: 50px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .panel {
+    border-radius: 12px;
+  }
+
+  .panel-title {
+    padding: 12px 12px 8px;
+    gap: 10px;
+  }
+
+  .panel-title h2 {
+    font-size: 17px;
+  }
+
+  .toolbar-container {
+    padding: 0 12px 8px;
+  }
+
+  .toolbar {
+    padding: 4px;
+    gap: 1px;
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  .toolbar button {
+    width: 30px;
+    height: 30px;
+  }
+
+  .divider {
+    align-self: stretch;
+    margin: 2px 2px;
+    height: auto;
+    width: 1px;
+  }
+
+  .editor-textarea,
+  .texto-resaltado {
+    padding: 12px;
+    font-size: 14px;
+    min-height: 180px;
+    line-height: 1.5;
+  }
+
+  .empty-footer {
+    height: 36px;
   }
 }

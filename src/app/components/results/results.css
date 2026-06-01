@@ -74,7 +74,6 @@
   padding: 1px 4px;
   border-radius: 4px;
 }
-
 /* --- RESPONSIVE DESIGN --- */
 @media (max-width: 768px) {
   .result-title-row h4 {
@@ -87,5 +86,28 @@
 
   .result-snippet {
     font-size: 13px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .result-title-row {
+    gap: 4px;
+    align-items: flex-start; /* Si el título tiene wrap, el ícono queda arriba */
+  }
+
+  .result-title-row h4 {
+    font-size: 12.5px;
+    overflow-wrap: anywhere; /* Títulos muy largos sin espacios no desbordan */
+  }
+
+  .result-meta {
+    font-size: 10px;
+    margin: 1px 0 3px 0;
+  }
+
+  .result-snippet {
+    font-size: 12.5px;
+    line-height: 1.45;
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Automata } from './automata/automata';
-import { RangoIndices } from './automata/automata.model';
+import { RangoIndices } from '../model/automata.model';
 
 @Injectable({
   providedIn: 'root',
@@ -67,6 +67,6 @@ export class Busqueda {
       patron = patron.trim();
     }
 
-    this.resultadoSubject.next(this.automata.kmp(texto, patron));
+    this.resultadoSubject.next(this.automata.buscarConAutomata(texto, patron));
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { RangoIndices } from './automata/automata.model';
-import { Resultados } from './resultados.model';
+import { RangoIndices } from '../model/automata.model';
+import { Resultados } from '../model/resultados.model';
 
 @Injectable({
   providedIn: 'root',
@@ -71,5 +71,67 @@ export class Utils {
     }
 
     return resultados;
+  }
+
+  separar(patron: string, separador: string): string[] {
+    const separado: string[] = [];
+    let acc: string = '';
+
+    if (separador === '') {
+      for (let letra of patron) {
+        separado.push(letra);
+      }
+      return separado;
+    }
+
+    for (let caracter of patron) {
+      if (caracter === separador) {
+        separado.push(acc);
+        acc = '';
+        continue;
+      }
+      acc += caracter;
+    }
+
+    separado.push(acc);
+
+    return separado;
+  }
+
+  estaEnLista(simbolo: string, lista: string[]): boolean {
+    if (!lista) return false;
+
+    let estaEn: boolean = false;
+
+    for (let cadena of lista) {
+      if (cadena === simbolo) {
+        estaEn = true;
+        break;
+      }
+    }
+
+    return estaEn;
+  }
+
+  eliminarRepetidos(lista: string[]): string[] {
+    const sinRepetidos: string[] = [];
+
+    for (let cadena of lista) {
+      if (!this.estaEnLista(cadena, sinRepetidos)) sinRepetidos.push(cadena);
+    }
+
+    return sinRepetidos;
+  }
+
+  finalizaEn(cadena: string, sufijo: string): boolean {
+    if (sufijo.length > cadena.length) return false;
+
+    const parteOriginal: string = this.subString(
+      cadena,
+      cadena.length - sufijo.length,
+      cadena.length,
+    );
+
+    return sufijo === parteOriginal;
   }
 }
