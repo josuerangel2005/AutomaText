@@ -17,7 +17,6 @@
     </span>
     <h2>Búsqueda</h2>
   </div>
-
   <div class="search-row">
     <div class="input-container">
       <input
@@ -28,7 +27,6 @@
         placeholder="Juan comia yogurt"
       />
     </div>
-
     <button (click)="buscar()" type="button" class="search-button">
       <svg
         width="16"
@@ -46,20 +44,20 @@
       <span>Buscar</span>
     </button>
   </div>
-
   <label class="checkbox-row">
-    <input [(ngModel)]="ignorarMayusculas" type="checkbox" class="custom-checkbox" />
-    <span class="checkbox-text">Ignorar mayúsculas/minúsculas</span>
-
-    <input [(ngModel)]="ignorarEspaciosEnBlanco" type="checkbox" class="custom-checkbox" />
-    <span class="checkbox-text">Ignorar espacios en blanco</span>
+    <span class="checkbox-item">
+      <input [(ngModel)]="ignorarMayusculas" type="checkbox" class="custom-checkbox" />
+      <span class="checkbox-text">Ignorar mayúsculas/minúsculas</span>
+    </span>
+    <span class="checkbox-item">
+      <input [(ngModel)]="ignorarEspaciosEnBlanco" type="checkbox" class="custom-checkbox" />
+      <span class="checkbox-text">Ignorar espacios en blanco</span>
+    </span>
   </label>
-
   <div class="results-header">
     <h3>Resultados</h3>
     <span class="results-count">{{ totalCoincidencias }}</span>
   </div>
-
   <div class="results-list">
     @for (coincidencia of resultados; track coincidencia.titulo) {
       <app-results
