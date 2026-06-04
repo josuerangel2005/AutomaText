@@ -214,6 +214,10 @@
       [hidden]="modoVisual"
       (input)="alCambiarTexto()"
       (paste)="alPegar($event)"
+      autocorrect="off"
+      autocapitalize="off"
+      autocomplete="off"
+      spellcheck="false"
       data-placeholder="Escriba su texto aquí..."
     ></div>
     <div [hidden]="!modoVisual" class="texto-resaltado" [innerHTML]="textoResaltado"></div>
