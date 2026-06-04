@@ -213,6 +213,7 @@
       contenteditable="true"
       [hidden]="modoVisual"
       (input)="alCambiarTexto()"
+      (paste)="alPegar($event)"
       data-placeholder="Escriba su texto aquí..."
     ></div>
     <div [hidden]="!modoVisual" class="texto-resaltado" [innerHTML]="textoResaltado"></div>

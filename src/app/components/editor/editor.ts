@@ -16,7 +16,6 @@ export class Editor implements OnInit {
   modoVisual: boolean = false;
   textoEditable: string = '';
   @ViewChild('editor') editorRef!: ElementRef<HTMLDivElement>;
-  ignorarMayusculas: boolean = false;
 
   constructor(
     private busqueda: Busqueda,
@@ -45,12 +44,17 @@ export class Editor implements OnInit {
     this.modoVisual = !this.modoVisual;
   }
 
+  alPegar(event: ClipboardEvent): void {
+    event.preventDefault();
+    const texto = event.clipboardData?.getData('text/plain') ?? '';
+    document.execCommand('insertText', false, texto);
+    this.actualizarTextoDesdeEditor();
+  }
   actualizarTextoDesdeEditor(): void {
     const editor = this.editorRef?.nativeElement;
     if (!editor) return;
-
     this.textoEditable = editor.innerHTML;
-    this.textoOriginal = editor.innerText;
+    this.textoOriginal = editor.innerText.replace(/\n+$/, '');
     this.busqueda.setTexto(this.textoOriginal);
   }
 

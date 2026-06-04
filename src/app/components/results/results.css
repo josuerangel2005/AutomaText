@@ -67,9 +67,8 @@
 /* Estilo global o para cuando inyectas etiquetas <mark> o <span> con estilos
   desde el TypeScript para resaltar la palabra buscada (ej: "autómatas")
 */
-::v-deep mark,
-::v-deep .highlight-match {
-  background-color: #fef08a; /* Amarillo suave idéntico a la imagen */
+::ng-deep .remarcado {
+  background-color: #fef08a;
   color: #000000;
   padding: 1px 4px;
   border-radius: 4px;

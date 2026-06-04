@@ -24,7 +24,10 @@ export class Utils {
     const match: string = this.subString(texto, rango.inicio, rango.final + 1);
     const despues: string = this.subString(texto, rango.final + 1, final);
 
-    return `${antes}<span class="remarcado">${match}</span>${despues} ...`;
+    const escapar = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    return `${escapar(antes)}<span class="remarcado">${escapar(match)}</span>${escapar(despues)} ...`;
   }
 
   lineas(texto: string): string[] {

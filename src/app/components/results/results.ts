@@ -1,6 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { RangoIndices } from '../../model/automata.model';
-import { Busqueda } from '../../services/busqueda';
 
 @Component({
   selector: 'app-results',
@@ -12,14 +10,4 @@ export class Results {
   @Input() title: string = '';
   @Input() meta: string = '';
   @Input() snippet: string = '';
-
-  resultados: RangoIndices[] = [];
-
-  ngOnInit(): void {
-    this.busqueda.resultado$.subscribe((val: RangoIndices[]) => {
-      this.resultados = val;
-    });
-  }
-
-  constructor(private busqueda: Busqueda) {}
 }

@@ -8,6 +8,10 @@ import { RangoIndices } from '../model/automata.model';
 export class Resaltado {
   constructor(private utils: Utils) {}
 
+  private escapar(texto: string): string {
+    return texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
   aRemarcar(texto: string, indices: RangoIndices[]): string[] {
     let remarcadas: string[] = [];
 
@@ -21,23 +25,18 @@ export class Resaltado {
   textoNormal(texto: string, indices: RangoIndices[]): string[] {
     let textoNormal: string[] = [];
     let cursor: number = 0;
-
     for (let rango of indices) {
       const fragmento: string = this.utils.subString(texto, cursor, rango.inicio);
-      textoNormal.push(fragmento);
+      textoNormal.push(this.escapar(fragmento));
       cursor = rango.final + 1;
     }
-
-    textoNormal.push(this.utils.subString(texto, cursor, texto.length));
-
+    textoNormal.push(this.escapar(this.utils.subString(texto, cursor, texto.length)));
     return textoNormal;
   }
-
   remarcarCoincidencias(texto: string, indices: RangoIndices[]): string[] {
     let remarcadas: string[] = [];
-
     for (let palabra of this.aRemarcar(texto, indices)) {
-      remarcadas.push('<span class="remarcado">' + palabra + '</span>');
+      remarcadas.push('<span class="remarcado">' + this.escapar(palabra) + '</span>');
     }
     return remarcadas;
   }
