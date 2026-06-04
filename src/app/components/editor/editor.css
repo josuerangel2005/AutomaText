@@ -16,7 +16,6 @@
   width: 100%;
 }
 
-/* Cabecera */
 .panel-title {
   display: flex;
   align-items: center;
@@ -43,13 +42,11 @@
   color: #1c1c1e;
 }
 
-/* Contenedor de la barra de herramientas para aplicar el padding exterior */
 .toolbar-container {
   padding: 0 24px 12px;
   background: #ffffff;
 }
 
-/* Barra de herramientas flotante gris clara */
 .toolbar {
   display: flex;
   align-items: center;
@@ -60,15 +57,14 @@
   flex-wrap: wrap;
 }
 
-/* Botones de herramientas */
 .toolbar button {
   border: none;
   background: transparent;
   color: #2c2c2e;
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 16px;
-  width: 36px;
+  font-size: 14px;
   height: 36px;
+  padding: 0 10px;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
@@ -79,26 +75,43 @@
     color 0.2s ease;
 }
 
-.toolbar button:hover {
+.toolbar button:hover:not(:disabled) {
   background: #e5e5ea;
 }
 
-/* Estilos específicos de texto plano para simular los botones tipográficos */
-.btn-bold {
-  font-weight: 700;
-  font-size: 17px !important;
-}
-.btn-italic {
-  font-style: italic;
-  font-family: 'Georgia', serif !important;
-  font-size: 18px !important;
-}
-.btn-underline {
-  text-decoration: underline;
-  font-size: 17px !important;
+.toolbar button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
-/* Separadores internos de la toolbar */
+.btn-font {
+  font-weight: 600;
+  font-size: 13px !important;
+  min-width: 36px;
+}
+
+.btn-clear {
+  font-size: 13px !important;
+  color: #c0392b;
+  font-weight: 500;
+}
+
+.btn-clear:hover {
+  background: rgba(192, 57, 43, 0.08) !important;
+}
+
+.zoom-indicator {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5b4dbd;
+  min-width: 40px;
+  text-align: center;
+  background: rgba(91, 77, 189, 0.08);
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+
 .divider {
   width: 1px;
   height: 20px;
@@ -106,7 +119,6 @@
   margin: 0 6px;
 }
 
-/* Área de Texto y Renderizado */
 .editor-content-area {
   flex: 1;
   background: #ffffff;
@@ -114,8 +126,7 @@
   position: relative;
 }
 
-.editor-textarea,
-.texto-resaltado {
+.editor-textarea {
   width: 100%;
   min-height: 280px;
   box-sizing: border-box;
@@ -129,20 +140,33 @@
     system-ui,
     -apple-system,
     sans-serif;
-  font-size: 16px;
   line-height: 1.6;
   color: #1c1c1e;
 }
 
-/* Simulación de los resaltados que inyecta tu lógica (ej. etiquetas <mark> o spans) */
+.editor-textarea::placeholder {
+  color: #999;
+}
+
 .texto-resaltado {
+  width: 100%;
+  min-height: 280px;
+  box-sizing: border-box;
+  padding: 20px 24px;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  line-height: 1.6;
+  color: #1c1c1e;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
 
-/* Modificadores del botón del ojo para el estado activo */
 .eye-button {
   color: #8e8e93;
+  width: 36px !important;
 }
 
 .eye-button.active {
@@ -150,110 +174,80 @@
   background: rgba(91, 77, 189, 0.1) !important;
 }
 
-/* Footer vacío de fondo gris tal cual la imagen */
 .empty-footer {
   height: 90px;
   border-top: 1px solid #e5e5ea;
   background: #fbfbfd;
 }
-.editor-contenteditable:empty::before {
-  content: attr(data-placeholder);
-  color: #999;
-  pointer-events: none;
+
+.btn-tabla {
+  font-size: 13px !important;
+  font-weight: 500;
+  color: #5b4dbd;
+  padding: 0 12px;
 }
 
-/* --- RESPONSIVE DESIGN --- */
+.btn-tabla:hover {
+  background: rgba(91, 77, 189, 0.08) !important;
+}
+
+::ng-deep .texto-resaltado .remarcado-activo {
+  background-color: #f97316;
+  color: #ffffff;
+  outline: 2px solid #ea580c;
+  border-radius: 3px;
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .panel {
     border-radius: 16px;
   }
-
   .panel-title {
     padding: 16px 16px 10px;
   }
-
   .panel-title h2 {
     font-size: 19px;
   }
-
   .toolbar-container {
     padding: 0 16px 10px;
   }
-
-  .toolbar {
-    padding: 4px 6px;
-    gap: 2px;
-  }
-
-  .toolbar button {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
-  }
-
-  .divider {
-    margin: 0 3px;
-    height: 16px;
-  }
-
   .editor-textarea,
   .texto-resaltado {
     padding: 16px;
-    font-size: 15px;
     min-height: 220px;
   }
-
   .empty-footer {
     height: 50px;
   }
 }
 
-/* Móviles pequeños */
 @media (max-width: 480px) {
   .panel {
     border-radius: 12px;
   }
-
   .panel-title {
     padding: 12px 12px 8px;
     gap: 10px;
   }
-
   .panel-title h2 {
     font-size: 17px;
   }
-
   .toolbar-container {
     padding: 0 12px 8px;
   }
-
   .toolbar {
     padding: 4px;
-    gap: 1px;
+    gap: 2px;
     flex-wrap: wrap;
     row-gap: 4px;
   }
-
-  .toolbar button {
-    width: 30px;
-    height: 30px;
-  }
-
-  .divider {
-    align-self: stretch;
-    margin: 2px 2px;
-    height: auto;
-    width: 1px;
-  }
-
   .editor-textarea,
   .texto-resaltado {
     padding: 12px;
-    font-size: 14px;
     min-height: 180px;
     line-height: 1.5;
   }
-
   .empty-footer {
     height: 36px;
   }

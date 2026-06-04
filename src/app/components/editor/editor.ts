@@ -14,8 +14,14 @@ export class Editor implements OnInit {
   textoOriginal: string = '';
   textoResaltado: string = '';
   modoVisual: boolean = false;
-  textoEditable: string = '';
-  @ViewChild('editor') editorRef!: ElementRef<HTMLDivElement>;
+  zoomLevel: number = 100;
+  mostrarTabla: boolean = false;
+
+  readonly ZOOM_MIN = 50;
+  readonly ZOOM_MAX = 170;
+  readonly ZOOM_STEP = 10;
+
+  @ViewChild('editor') editorRef!: ElementRef<HTMLTextAreaElement>;
 
   constructor(
     private busqueda: Busqueda,
@@ -30,6 +36,19 @@ export class Editor implements OnInit {
         this.modoVisual = true;
       }
     });
+
+    this.busqueda.indiceSeleccionado$.subscribe((indice: number) => {
+      if (indice < 0) return;
+      this.modoVisual = true;
+      setTimeout(() => {
+        const spans = document.querySelectorAll('.texto-resaltado .remarcado');
+        spans.forEach((s) => s.classList.remove('remarcado-activo'));
+        if (spans[indice]) {
+          spans[indice].classList.add('remarcado-activo');
+          spans[indice].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    });
   }
 
   alCambiarTexto(): void {
@@ -40,46 +59,36 @@ export class Editor implements OnInit {
     this.textoResaltado = this.resaltar.textoFinal(this.textoOriginal, this.resultados);
   }
 
-  alternarModo(): void {
-    this.modoVisual = !this.modoVisual;
-  }
-
-  alPegar(event: ClipboardEvent): void {
-    event.preventDefault();
-    const texto = event.clipboardData?.getData('text/plain') ?? '';
-    document.execCommand('insertText', false, texto);
-    this.actualizarTextoDesdeEditor();
-  }
   actualizarTextoDesdeEditor(): void {
     const editor = this.editorRef?.nativeElement;
     if (!editor) return;
-    this.textoEditable = editor.innerHTML;
-    this.textoOriginal = editor.innerText.replace(/\n+$/, '');
+    this.textoOriginal = editor.value;
     this.busqueda.setTexto(this.textoOriginal);
   }
 
-  aplicarFormato(formato: 'bold' | 'italic' | 'underline'): void {
-    if (this.modoVisual) return;
-
-    document.execCommand(formato, false);
-    this.actualizarTextoDesdeEditor();
+  aumentarFuente(): void {
+    if (this.zoomLevel < this.ZOOM_MAX) {
+      this.zoomLevel = Math.min(this.zoomLevel + this.ZOOM_STEP, this.ZOOM_MAX);
+    }
   }
 
-  aplicarAlineacion(formato: 'justifyLeft' | 'justifyCenter' | 'justifyRight'): void {
-    if (this.modoVisual) return;
-    document.execCommand(formato, false);
-    this.actualizarTextoDesdeEditor();
+  disminuirFuente(): void {
+    if (this.zoomLevel > this.ZOOM_MIN) {
+      this.zoomLevel = Math.max(this.zoomLevel - this.ZOOM_STEP, this.ZOOM_MIN);
+    }
   }
 
-  aplicarLista(tipo: 'insertUnorderedList' | 'insertOrderedList'): void {
-    if (this.modoVisual) return;
-    document.execCommand(tipo, false);
-    this.actualizarTextoDesdeEditor();
+  limpiar(): void {
+    const editor = this.editorRef?.nativeElement;
+    if (editor) editor.value = '';
+    this.textoOriginal = '';
+    this.textoResaltado = '';
+    this.resultados = [];
+    this.modoVisual = false;
+    this.busqueda.setTexto('');
   }
 
-  resaltarSeleccion(): void {
-    if (this.modoVisual) return;
-    document.execCommand('hiliteColor', false, '#fff59d');
-    this.actualizarTextoDesdeEditor();
+  get fontSize(): string {
+    return `${(this.zoomLevel / 100) * 16}px`;
   }
 }

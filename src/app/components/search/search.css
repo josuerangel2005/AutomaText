@@ -173,6 +173,10 @@
   transition: transform 0.2s ease;
 }
 
+.result-item {
+  cursor: pointer;
+}
+
 /* --- RESPONSIVE DESIGN --- */
 @media (max-width: 768px) {
   .panel {

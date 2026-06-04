@@ -41,4 +41,8 @@ export class Search implements OnInit {
     this.busqueda.setIgnorarEspaciosEnBlanco(this.ignorarEspaciosEnBlanco);
     this.busqueda.buscar();
   }
+
+  seleccionarCoincidencia(indice: number): void {
+    this.busqueda.setIndiceSeleccionado(indice);
+  }
 }

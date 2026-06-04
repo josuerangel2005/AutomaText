@@ -7,9 +7,10 @@ import { Editor } from './components/editor/editor';
 import { Search } from './components/search/search';
 import { Results } from './components/results/results';
 import { FormsModule } from '@angular/forms';
+import { Tabla } from './components/tabla/tabla';
 
 @NgModule({
-  declarations: [App, Editor, Search, Results],
+  declarations: [App, Editor, Search, Results, Tabla],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],

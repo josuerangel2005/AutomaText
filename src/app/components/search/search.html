@@ -59,12 +59,13 @@
     <span class="results-count">{{ totalCoincidencias }}</span>
   </div>
   <div class="results-list">
-    @for (coincidencia of resultados; track coincidencia.titulo) {
+    @for (coincidencia of resultados; track coincidencia.titulo; let i = $index) {
       <app-results
         class="result-item"
         [title]="coincidencia.titulo"
         [meta]="'Línea ' + coincidencia.linea + ', posición ' + coincidencia.posicion"
         [snippet]="coincidencia.snippet"
+        (click)="seleccionarCoincidencia(i)"
       ></app-results>
     }
   </div>

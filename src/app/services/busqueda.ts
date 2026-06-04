@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Automata } from './automata/automata';
 import { RangoIndices } from '../model/automata.model';
+import { TablaTransciones } from '../model/tabla.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +13,16 @@ export class Busqueda {
   private resultadoSubject = new BehaviorSubject<RangoIndices[]>([]);
   private ignorarMayusculasSubject = new BehaviorSubject<boolean>(false);
   private ignorarEspaciosEnBlancoSubject = new BehaviorSubject<boolean>(false);
+  private tablaEstados = new BehaviorSubject<TablaTransciones>({});
+  private indiceSeleccionadoSubject = new BehaviorSubject<number>(-1);
 
   texto$ = this.textoSubject.asObservable();
   patron$ = this.patronSubject.asObservable();
   resultado$ = this.resultadoSubject.asObservable();
   ignorarMayusculas$ = this.ignorarMayusculasSubject.asObservable();
   ignorarEspaciosEnBlanco$ = this.ignorarEspaciosEnBlancoSubject.asObservable();
+  tablaEstados$ = this.tablaEstados.asObservable();
+  indiceSeleccionado$ = this.indiceSeleccionadoSubject.asObservable();
 
   constructor(private automata: Automata) {}
 
@@ -37,6 +42,14 @@ export class Busqueda {
     this.ignorarEspaciosEnBlancoSubject.next(ignorar);
   }
 
+  setTablaEstados(tabla: TablaTransciones): void {
+    this.tablaEstados.next(tabla);
+  }
+
+  setIndiceSeleccionado(indice: number): void {
+    this.indiceSeleccionadoSubject.next(indice);
+  }
+
   getTexto(): string {
     return this.textoSubject.getValue();
   }
@@ -51,6 +64,10 @@ export class Busqueda {
 
   getIgnorarEspaciosEnBlanco(): boolean {
     return this.ignorarEspaciosEnBlancoSubject.getValue();
+  }
+
+  getTablaEstados(): TablaTransciones {
+    return this.tablaEstados.getValue();
   }
 
   buscar(): void {
@@ -68,5 +85,7 @@ export class Busqueda {
     }
 
     this.resultadoSubject.next(this.automata.buscarConAutomata(texto, patron));
+    const { delta } = this.automata.construirAutomata(patron);
+    this.tablaEstados.next(delta);
   }
 }
