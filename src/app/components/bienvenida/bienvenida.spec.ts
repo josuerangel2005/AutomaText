@@ -176,3 +176,73 @@ describe('Bienvenida', () => {
     expect(PLANTILLA).not.toMatch(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{2B00}-\u{2BFF}]/u);
   });
 });
+
+function estilosTotales(): string {
+  return Array.from(document.head.querySelectorAll('style'))
+    .map((s) => s.textContent ?? '')
+    .join('\n');
+}
+
+function patronSelector(selector: string): string {
+  const alcance = '(?:\\[[_a-z][^\\]]*\\])*';
+  return (
+    selector
+      .split(':')
+      .map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + alcance)
+      .join(':') + '\\s*\\{'
+  );
+}
+
+function bloque(selector: string): string {
+  return estilosTotales().match(new RegExp(patronSelector(selector) + '([^}]*)\\}'))?.[1] ?? '';
+}
+
+function propiedad(bloqueCss: string, propiedadCss: string): string {
+  const regexp = new RegExp(`(?:^|[;\\s])${propiedadCss}\\s*:\\s*([^;]+);?$`, 'm');
+  return bloqueCss.match(regexp)?.[1]?.trim() ?? '';
+}
+
+describe('Bienvenida (S2: sin animaciones forzadas ni emojis)', () => {
+  let fixture: ComponentFixture<Bienvenida>;
+  let elemento: HTMLElement;
+
+  beforeEach(() => {
+    window.localStorage.clear();
+    TestBed.configureTestingModule({ declarations: [Bienvenida] });
+    fixture = TestBed.createComponent(Bienvenida);
+    elemento = fixture.nativeElement;
+    document.body.appendChild(elemento);
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    elemento.remove();
+    window.localStorage.clear();
+  });
+
+  it('los estilos de la modal no definen animaciones ni keyframes', () => {
+    const estilos = estilosTotales();
+    expect(estilos).not.toMatch(/@keyframes/);
+    expect(estilos).not.toMatch(/[^-]animation\s*:/);
+  });
+
+  it('los estilos de la modal no aplican transiciones que retrasen su aparición', () => {
+    const fondo = bloque('.bienvenida-fondo');
+    const modal = bloque('.bienvenida-modal');
+    expect(propiedad(fondo, 'transition')).toBe('');
+    expect(propiedad(modal, 'transition')).toBe('');
+
+    const fondoConTruco = fondo.match(/opacity|transform|visibility|filter|scale/g) ?? [];
+    expect(fondoConTruco).toEqual([]);
+  });
+
+  it('la modal aparece de inmediato, sin esperar ciclos ni animaciones', () => {
+    expect(elemento.querySelector('.bienvenida-modal')).not.toBeNull();
+  });
+
+  it('ningún texto de la modal contiene emojis', () => {
+    const texto = elemento.querySelector('.bienvenida-modal')?.textContent ?? '';
+    const emoji = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}]/u;
+    expect(emoji.test(texto)).toBe(false);
+  });
+});
