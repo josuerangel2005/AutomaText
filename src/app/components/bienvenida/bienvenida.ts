@@ -18,10 +18,10 @@ export class Bienvenida {
   @ViewChild('fondo') fondoRef?: ElementRef<HTMLElement>;
   @ViewChild('empezar') empezarRef?: ElementRef<HTMLButtonElement>;
 
-  visible: boolean = false;
+  visible: boolean = true;
 
   ngOnInit(): void {
-    this.visible = !window.localStorage.getItem(Bienvenida.CLAVE_VISTA);
+    this.visible = true;
   }
 
   ngAfterViewInit(): void {
@@ -44,7 +44,7 @@ export class Bienvenida {
   cerrar(): void {
     if (!this.visible) return;
     this.visible = false;
-    window.localStorage.setItem(Bienvenida.CLAVE_VISTA, '1');
+    window.localStorage.removeItem(Bienvenida.CLAVE_VISTA);
     this.devolverFoco();
   }
 

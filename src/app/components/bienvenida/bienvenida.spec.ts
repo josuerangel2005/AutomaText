@@ -1,8 +1,16 @@
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Bienvenida } from './bienvenida';
 
 const CLAVE = 'automatext:inicio-visto';
+
+const dirEspec = dirname(fileURLToPath(import.meta.url));
+const ESTILOS_GLOBALES = readFileSync(join(dirEspec, '..', '..', '..', 'styles.css'), 'utf8');
+const ESTILOS_MODAL = readFileSync(join(dirEspec, 'bienvenida.css'), 'utf8');
+const PLANTILLA = readFileSync(join(dirEspec, 'bienvenida.html'), 'utf8');
 
 describe('Bienvenida', () => {
   let fixture: ComponentFixture<Bienvenida>;
@@ -31,7 +39,7 @@ describe('Bienvenida', () => {
     window.localStorage.clear();
   });
 
-  it('se muestra al primer arranque con título, texto explicativo y botón "Empezar"', () => {
+  it('se muestra al abrir la app con título, texto explicativo y botón "Empezar"', () => {
     const modal = elemento.querySelector('.bienvenida-modal');
     expect(modal).not.toBeNull();
 
@@ -45,37 +53,27 @@ describe('Bienvenida', () => {
     expect(boton?.textContent).toContain('Empezar');
   });
 
-  it('no se muestra si la elección ya quedó registrada en localStorage', () => {
-    window.localStorage.setItem(CLAVE, '1');
-    const reabrir = TestBed.createComponent(Bienvenida);
-    reabrir.detectChanges();
-    expect(reabrir.nativeElement.querySelector('.bienvenida-modal')).toBeNull();
-  });
-
-  it('se cierra al pulsar "Empezar" y registra la elección', () => {
+  it('se cierra al pulsar "Empezar"', () => {
     const boton = elemento.querySelector<HTMLButtonElement>('.bienvenida-modal button');
     boton?.click();
     fixture.detectChanges();
 
     expect(elemento.querySelector('.bienvenida-modal')).toBeNull();
-    expect(window.localStorage.getItem(CLAVE)).toBe('1');
   });
 
-  it('se cierra al pulsar Escape y registra la elección', () => {
+  it('se cierra al pulsar Escape', () => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     fixture.detectChanges();
 
     expect(elemento.querySelector('.bienvenida-modal')).toBeNull();
-    expect(window.localStorage.getItem(CLAVE)).toBe('1');
   });
 
-  it('se cierra al hacer clic fuera de la modal y registra la elección', () => {
+  it('se cierra al hacer clic fuera de la modal', () => {
     const fondo = elemento.querySelector<HTMLElement>('.bienvenida-fondo');
     fondo?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     fixture.detectChanges();
 
     expect(elemento.querySelector('.bienvenida-modal')).toBeNull();
-    expect(window.localStorage.getItem(CLAVE)).toBe('1');
   });
 
   it('no se cierra al hacer clic dentro de la modal', () => {
@@ -84,7 +82,6 @@ describe('Bienvenida', () => {
     fixture.detectChanges();
 
     expect(elemento.querySelector('.bienvenida-modal')).not.toBeNull();
-    expect(window.localStorage.getItem(CLAVE)).toBeNull();
   });
 
   it('el foco entra en la modal al abrirse y vuelve al contenido al cerrarse', () => {
@@ -98,14 +95,85 @@ describe('Bienvenida', () => {
   });
 
   it('en pantallas estrechas la modal usa un ancho fluido con margen, no uno fijo mayor que la ventana', () => {
-    const estilos = Array.from(document.head.querySelectorAll('style'))
-      .map((s) => s.textContent ?? '')
-      .join('\n');
+    expect(ESTILOS_MODAL).toMatch(/position:\s*fixed/);
+    expect(ESTILOS_MODAL).toMatch(/max-width:\s*min\(/);
+    expect(ESTILOS_MODAL).toMatch(/100vw/);
+    expect(ESTILOS_MODAL).not.toMatch(/[^-]width:\s*[5-9]\d{2,}px/);
+  });
 
-    expect(estilos).toMatch(/position:\s*fixed/);
-    expect(estilos).toMatch(/max-width:\s*min\(/);
-    expect(estilos).toMatch(/100vw/);
-    expect(estilos).not.toMatch(/[^-]width:\s*[5-9]\d{2,}px/);
+  it('reaparece tras cerrar la modal y recargar la página, aunque el navegador recuerde la sesión previa', () => {
+    const boton = elemento.querySelector<HTMLButtonElement>('.bienvenida-modal button');
+    boton?.click();
+    fixture.detectChanges();
+    expect(elemento.querySelector('.bienvenida-modal')).toBeNull();
+
+    window.localStorage.setItem(CLAVE, '1');
+
+    const recarga = TestBed.createComponent(Bienvenida);
+    recarga.detectChanges();
+    expect(recarga.nativeElement.querySelector('.bienvenida-modal')).not.toBeNull();
+  });
+
+  it('se muestra siempre, ignorando cualquier marca previa guardada en localStorage', () => {
+    window.localStorage.setItem(CLAVE, '1');
+
+    const nuevo = TestBed.createComponent(Bienvenida);
+    nuevo.detectChanges();
+    expect(nuevo.nativeElement.querySelector('.bienvenida-modal')).not.toBeNull();
+  });
+
+  it('los estilos globales definen variables compartidas de tipografía y color', () => {
+    expect(ESTILOS_GLOBALES).toMatch(/:root\s*\{/);
+    for (const variable of [
+      '--fuente-base',
+      '--color-primario',
+      '--color-primario-hover',
+      '--color-texto',
+      '--color-texto-suave',
+      '--fondo-suave',
+      '--fondo-superficie',
+      '--radio-boton',
+      '--radio-panel',
+      '--sombra-panel',
+    ]) {
+      expect(ESTILOS_GLOBALES).toContain(variable);
+    }
+  });
+
+  it('la modal usa la misma fuente global que el resto de la app', () => {
+    const fuenteGlobal = ESTILOS_GLOBALES.match(/--fuente-base:\s*([^;]+);/)?.[1]?.trim() ?? '';
+    expect(fuenteGlobal).toContain('Inter');
+    const fuenteApp = readFileSync(join(dirEspec, '..', '..', 'app.css'), 'utf8');
+    const fuenteDeclarada = fuenteApp.match(/font-family:\s*([^;]+);/)?.[1]?.trim() ?? '';
+    expect(new RegExp(fuenteDeclarada.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).test(fuenteGlobal))
+      .toBe(true);
+    expect(ESTILOS_MODAL).toMatch(/font-family:\s*var\(--fuente-base\)/);
+    expect(ESTILOS_MODAL).not.toMatch(/font-family:[^;]*(Inter|Arial)/);
+  });
+
+  it('la modal usa las variables globales de color en fondo, título, texto y botón', () => {
+    expect(ESTILOS_MODAL).not.toMatch(/#5b4dbd/);
+    expect(ESTILOS_MODAL).toMatch(/var\(--color-primario\)/);
+    expect(ESTILOS_MODAL).toMatch(/var\(--color-primario-hover\)/);
+    expect(ESTILOS_MODAL).toMatch(/var\(--color-texto-suave\)/);
+    expect(ESTILOS_MODAL).toMatch(/var\(--fondo-superficie\)/);
+    expect(ESTILOS_MODAL).toMatch(/var\(--radio-panel\)/);
+    expect(ESTILOS_MODAL).toMatch(/var\(--sombra-panel\)/);
+  });
+
+  it('la modal no declara animaciones ni transiciones automáticas', () => {
+    const bloquesModal = ESTILOS_MODAL.match(/\.bienvenida[^{]*\{[^}]*\}/g) ?? [];
+    expect(bloquesModal.length).toBeGreaterThan(0);
+    for (const bloque of bloquesModal) {
+      expect(bloque).not.toMatch(/animation|transition|@keyframes/);
+    }
+    expect(ESTILOS_MODAL).not.toMatch(/@keyframes/);
+  });
+
+  it('el contenido de la modal no muestra emojis', () => {
+    const contenidoModal = fixture.nativeElement.textContent ?? '';
+    expect(contenidoModal).not.toMatch(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{2B00}-\u{2BFF}]/u);
+    expect(PLANTILLA).not.toMatch(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{2B00}-\u{2BFF}]/u);
   });
 });
 
@@ -133,63 +201,6 @@ function propiedad(bloqueCss: string, propiedadCss: string): string {
   const regexp = new RegExp(`(?:^|[;\\s])${propiedadCss}\\s*:\\s*([^;]+);?$`, 'm');
   return bloqueCss.match(regexp)?.[1]?.trim() ?? '';
 }
-
-describe('Bienvenida (S1: estilo coherente con el resto de la app)', () => {
-  let fixture: ComponentFixture<Bienvenida>;
-
-  beforeEach(() => {
-    window.localStorage.clear();
-    TestBed.configureTestingModule({ declarations: [Bienvenida] });
-    fixture = TestBed.createComponent(Bienvenida);
-    fixture.detectChanges();
-  });
-
-  it('usa la misma familia tipográfica que la app (Inter con fallbacks del sistema)', () => {
-    const fuente = propiedad(bloque('.bienvenida-modal'), 'font-family');
-    expect(fuente).toContain('Inter');
-    expect(fuente).toContain('system-ui');
-    expect(fuente).not.toContain('Arial');
-  });
-
-  it('el color base del texto coincide con el de los paneles de la app (#1c1c1e)', () => {
-    expect(propiedad(bloque('.bienvenida-modal'), 'color')).toBe('#1c1c1e');
-  });
-
-  it('el título usa el estilo de los títulos de panel: 22px, peso 500 y color #1c1c1e', () => {
-    const titulo = bloque('.bienvenida-titulo');
-    expect(propiedad(titulo, 'font-size')).toBe('22px');
-    expect(propiedad(titulo, 'font-weight')).toBe('500');
-    expect(propiedad(titulo, 'color')).toBe('#1c1c1e');
-  });
-
-  it('el texto descriptivo usa el gris secundario de la app (#636366)', () => {
-    expect(propiedad(bloque('.bienvenida-texto'), 'color')).toBe('#636366');
-  });
-
-  it('el botón "Empezar" es el mismo botón primario de la app (#5b4dbd, radio 14px, 46px de alto, peso 500)', () => {
-    const boton = bloque('.bienvenida-empezar');
-    expect(propiedad(boton, 'background')).toBe('#5b4dbd');
-    expect(propiedad(boton, 'color')).toBe('#ffffff');
-    expect(propiedad(boton, 'border-radius')).toBe('14px');
-    expect(propiedad(boton, 'height')).toBe('46px');
-    expect(propiedad(boton, 'font-size')).toBe('15px');
-    expect(propiedad(boton, 'font-weight')).toBe('500');
-  });
-
-  it('el hover del botón usa el mismo color que los botones primarios de la app (#4c3bcc)', () => {
-    const hover = estilosTotales().match(
-      new RegExp(patronSelector('.bienvenida-empezar:hover') + '([^}]*)\\}'),
-    );
-    expect(propiedad(hover?.[1] ?? '', 'background')).toBe('#4c3bcc');
-  });
-
-  it('el contenedor es como los paneles de la app: blanco, borde #d3d3df y radio 24px', () => {
-    const modal = bloque('.bienvenida-modal');
-    expect(propiedad(modal, 'background')).toBe('#ffffff');
-    expect(propiedad(modal, 'border')).toContain('#d3d3df');
-    expect(propiedad(modal, 'border-radius')).toBe('24px');
-  });
-});
 
 describe('Bienvenida (S2: sin animaciones forzadas ni emojis)', () => {
   let fixture: ComponentFixture<Bienvenida>;
