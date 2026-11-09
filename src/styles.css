@@ -1,17 +1,31 @@
+:root {
+  --fuente-base: Inter, Arial, sans-serif;
+  --color-primario: #5b4dbd;
+  --color-primario-hover: #6657ca;
+  --color-texto: #1f1f1f;
+  --color-texto-suave: #44444f;
+  --fondo-suave: #f2f2f6;
+  --fondo-superficie: #ffffff;
+  --radio-panel: 16px;
+  --radio-boton: 10px;
+  --sombra-panel: 0 18px 50px rgba(0, 0, 0, 0.3);
+}
+
 * {
-  margingn: 0;
+  margin: 0;
   padding: 0;
 }
+
 .texto-resaltado {
   white-space: pre-wrap;
-  font-family: 'Inter', sans-serif;
-  color: #000;
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
   line-height: 1.6;
 }
 
 .remarcado {
   background-color: #fffde2;
-  color: #000;
+  color: var(--color-texto);
   font-weight: 500;
   border-radius: 2px;
   padding: 0 2px;
