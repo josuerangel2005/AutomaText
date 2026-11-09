@@ -1,0 +1,25 @@
+@if (visible) {
+  <div class="bienvenida-fondo" #fondo (click)="alHacerClicFondo($event)">
+    <section
+      class="bienvenida-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bienvenida-titulo"
+    >
+      <h2 id="bienvenida-titulo" class="bienvenida-titulo">¡Bienvenido a AutomaText!</h2>
+      <p class="bienvenida-texto">
+        AutomaText es una herramienta para construir y probar autómatas sobre un texto: escribe tu
+        texto en el editor, define las transiciones y busca patrones para ver las coincidencias al
+        instante.
+      </p>
+      <button
+        type="button"
+        #empezar
+        class="bienvenida-empezar"
+        (click)="cerrar()"
+      >
+        Empezar
+      </button>
+    </section>
+  </div>
+}

@@ -8,9 +8,10 @@ import { Search } from './components/search/search';
 import { Results } from './components/results/results';
 import { FormsModule } from '@angular/forms';
 import { Tabla } from './components/tabla/tabla';
+import { Bienvenida } from './components/bienvenida/bienvenida';
 
 @NgModule({
-  declarations: [App, Editor, Search, Results, Tabla],
+  declarations: [App, Editor, Search, Results, Tabla, Bienvenida],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],
